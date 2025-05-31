@@ -1,0 +1,74 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <utility>
+
+using namespace std;
+
+vector<pair<int, int>> pares;
+
+
+vector<int> max_contenedores(int);
+vector<int> max_toneladas(int);
+
+int main()
+{
+	int capacidad; cin >> capacidad;
+
+	int tmp = capacidad;
+	int n; cin >> n;
+
+	pares.resize(n);
+
+	// First es para pesos y Seconde para contenedores
+
+	for (int i{ 0 }; i < n; i++)cin >> pares[i].second;
+	for (int i{ 0 }; i < n; i++)cin >> pares[i].first;
+
+	cout << "\ntoneladas: ";
+	for (auto a : max_toneladas(capacidad)) cout << a << " ";
+	cout << "\ncontenedores: ";
+	for (auto a : max_contenedores(tmp)) cout << a << " ";
+
+
+}
+
+vector<int> max_contenedores(int capacidad)
+{
+	sort(pares.begin(), pares.end());
+
+	vector<int> rptas;
+
+
+	for (auto a : pares)
+	{
+		if (capacidad >= a.first)
+		{
+			capacidad -= a.first;
+			rptas.push_back(a.second);
+		}
+	}
+	return rptas;
+}
+
+vector<int> max_toneladas(int capacidad)
+{
+	auto comp = [](pair<int, int> a, pair
+		<int, int> b) {
+			return a.second < b.second;
+		};
+
+	sort(pares.begin(), pares.end(), comp);
+
+	vector<int> rptas;
+
+	for (auto a : pares)
+	{
+		if (capacidad >= a.first)
+		{
+			capacidad -= a.first;
+			rptas.push_back(a.second);
+		}
+	}
+	return rptas;
+}
