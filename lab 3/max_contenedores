@@ -2,6 +2,7 @@
 #include <vector>
 #include <algorithm>
 #include <utility>
+#include <unordered_set>
 
 using namespace std;
 
@@ -9,7 +10,7 @@ vector<pair<int, int>> pares;
 
 
 vector<int> max_contenedores(int);
-vector<int> max_toneladas(int);
+int max_toneladas(int);
 
 int main()
 {
@@ -25,8 +26,10 @@ int main()
 	for (int i{ 0 }; i < n; i++)cin >> pares[i].second;
 	for (int i{ 0 }; i < n; i++)cin >> pares[i].first;
 
+
+	// Cantidad maxima de toneladas posibles
 	cout << "\ntoneladas: ";
-	for (auto a : max_toneladas(capacidad)) cout << a << " ";
+	cout << max_toneladas(capacidad) << endl;
 	cout << "\ncontenedores: ";
 	for (auto a : max_contenedores(tmp)) cout << a << " ";
 
@@ -51,24 +54,20 @@ vector<int> max_contenedores(int capacidad)
 	return rptas;
 }
 
-vector<int> max_toneladas(int capacidad)
+int max_toneladas(int capacidad)
 {
-	auto comp = [](pair<int, int> a, pair
-		<int, int> b) {
-			return a.second < b.second;
-		};
-
-	sort(pares.begin(), pares.end(), comp);
-
-	vector<int> rptas;
+	int max = 0;
 
 	for (auto a : pares)
 	{
-		if (capacidad >= a.first)
+		unordered_set<int> sumas = { 0 };
+
+		for (auto b : sumas)
 		{
-			capacidad -= a.first;
-			rptas.push_back(a.second);
+			int suma = b + a.first;
+			sumas.insert(suma);
+			if (abs(capacidad - suma) < abs(capacidad - max)) max = suma;
 		}
 	}
-	return rptas;
+	return max;
 }
